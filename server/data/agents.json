@@ -1,0 +1,20 @@
+{
+  "agents": [
+    {
+      "id": "crof",
+      "name": "Crof.ai",
+      "envKey": "NUXT_CROF_API_KEY",
+      "enabled": true,
+      "quotaUrl": "https://crof.ai/usage_api/",
+      "authType": "bearer"
+    },
+    {
+      "id": "zai",
+      "name": "Z.ai",
+      "envKey": "NUXT_ZAI_API_KEY",
+      "enabled": true,
+      "quotaUrl": "https://api.z.ai/api/monitor/usage/quota/limit",
+      "authType": "bearer"
+    }
+  ]
+}
