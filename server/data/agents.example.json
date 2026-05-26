@@ -3,6 +3,7 @@
     {
       "id": "crof",
       "name": "Crof.ai",
+      "apiKey": "",
       "envKey": "NUXT_CROF_API_KEY",
       "enabled": true,
       "quotaUrl": "https://crof.ai/usage_api/",
@@ -11,6 +12,7 @@
     {
       "id": "zai",
       "name": "Z.ai",
+      "apiKey": "",
       "envKey": "NUXT_ZAI_API_KEY",
       "enabled": true,
       "quotaUrl": "https://api.z.ai/api/monitor/usage/quota/limit",

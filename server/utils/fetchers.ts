@@ -1,7 +1,8 @@
-interface AgentConfig {
+export interface AgentConfig {
   id: string
   name: string
   envKey: string
+  apiKey: string
   enabled: boolean
   quotaUrl: string
   authType: string
@@ -134,7 +135,7 @@ function emptyResult(agent: AgentConfig, apiKeyConfigured: boolean, error: strin
 }
 
 export async function fetchAgentQuota(agent: AgentConfig): Promise<QuotaResult> {
-  const apiKey = (process.env[agent.envKey] ?? '').trim().replace(/^["']|["']$/g, '')
+  const apiKey = (agent.apiKey || process.env[agent.envKey] || '').trim().replace(/^["']|["']$/g, '')
 
   if (!apiKey) {
     return emptyResult(agent, false, null)

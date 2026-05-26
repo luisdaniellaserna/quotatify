@@ -25,3 +25,6 @@ logs
 
 #Images
 image/
+
+# Data with secrets
+server/data/agents.json
