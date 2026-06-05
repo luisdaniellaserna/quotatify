@@ -28,8 +28,22 @@ export interface QuotaResult {
   monthlyTotal: number
   monthlyRemaining: number
   resetsIn: string
+  weeklyResetsIn: string
+  monthlyResetsIn: string
   models: ModelUsage[]
   error: string | null
+}
+
+function formatFullDate(ts: number): string {
+  const d = new Date(ts)
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  })
 }
 
 function formatResetTime(ts: number): string {
@@ -57,9 +71,9 @@ async function fetchCrofQuota(agent: AgentConfig, apiKey: string): Promise<Quota
     usableLimit: res?.requests_plan ?? 1000,
     percentage: null,
     weeklyPercentage: null,
+    weeklyResetsIn: '',
+    monthlyResetsIn: '',
     monthlyUsed: 0,
-    monthlyTotal: 0,
-    monthlyRemaining: 0,
     resetsIn: '1:00 PM',
     models: [],
     error: null,
@@ -99,6 +113,8 @@ async function fetchZaiQuota(agent: AgentConfig, apiKey: string): Promise<QuotaR
     usableLimit: totalUsage,
     percentage: timeLimitPercentage ?? monthlyTokenLimit?.percentage ?? null,
     weeklyPercentage: weeklyTokenLimit?.percentage ?? null,
+    weeklyResetsIn: weeklyTokenLimit?.nextResetTime ? formatFullDate(weeklyTokenLimit.nextResetTime) : '',
+    monthlyResetsIn: mcpTimeLimit?.nextResetTime ? formatFullDate(mcpTimeLimit.nextResetTime) : '',
     monthlyUsed: mcpTimeLimit?.currentValue ?? 0,
     monthlyTotal: mcpTimeLimit?.usage ?? 0,
     monthlyRemaining: mcpTimeLimit?.remaining ?? 0,
@@ -125,6 +141,8 @@ function emptyResult(agent: AgentConfig, apiKeyConfigured: boolean, error: strin
     usableLimit: 1000,
     percentage: null,
     weeklyPercentage: null,
+    weeklyResetsIn: '',
+    monthlyResetsIn: '',
     monthlyUsed: 0,
     monthlyTotal: 0,
     monthlyRemaining: 0,

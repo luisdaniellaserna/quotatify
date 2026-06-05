@@ -26,7 +26,8 @@ async function handleRefresh() {
         <h1 class="text-2xl font-semibold text-base-content">AI Usage Dashboard</h1>
       </div>
       <button class="btn btn-ghost btn-sm" @click="handleRefresh" :disabled="store.loading">
-        <Icon name="lucide:refresh-cw" :width="14" class="mr-1" />
+        <span v-if="store.loading" class="loading loading-spinner loading-sm" />
+        <Icon v-else name="lucide:refresh-cw" :width="14" class="mr-1" />
         {{ store.loading ? 'Loading...' : 'Refresh' }}
       </button>
     </div>

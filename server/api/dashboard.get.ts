@@ -20,6 +20,8 @@ export default defineEventHandler(async () => {
     usableLimit: r.usableLimit,
     percentage: r.percentage,
     weeklyPercentage: r.weeklyPercentage,
+    weeklyResetsIn: r.weeklyResetsIn,
+    monthlyResetsIn: r.monthlyResetsIn,
     monthlyUsed: r.monthlyUsed,
     monthlyTotal: r.monthlyTotal,
     monthlyRemaining: r.monthlyRemaining,

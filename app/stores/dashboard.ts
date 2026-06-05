@@ -15,6 +15,8 @@ export interface AgentDashboard {
   usableLimit: number
   percentage: number | null
   weeklyPercentage: number | null
+  weeklyResetsIn: string
+  monthlyResetsIn: string
   monthlyUsed: number
   monthlyTotal: number
   monthlyRemaining: number
