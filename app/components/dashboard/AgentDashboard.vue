@@ -48,11 +48,13 @@ function formatCredits(n: number) {
             label="Weekly Quota"
             :value="`${agent.weeklyPercentage}%`"
             :warn="agent.weeklyPercentage >= 80"
+            :subtext="agent.weeklyResetsIn ? `Resets ${agent.weeklyResetsIn}` : ''"
           />
           <DashboardMetricCard
             label="Monthly MCP"
             :value="`${Math.round(agent.monthlyUsed / agent.monthlyTotal * 100)}%`"
             :warn="agent.monthlyRemaining <= 10"
+            :subtext="agent.monthlyResetsIn ? `Resets ${agent.monthlyResetsIn}` : ''"
           />
         </div>
         <div v-else class="grid grid-cols-2 gap-3">
