@@ -37,8 +37,8 @@ function formatCredits(n: number) {
         <div v-if="agent.percentage !== null" class="grid grid-cols-2 gap-3">
           <DashboardMetricCard
             label="Usage"
-            :value="`${agent.percentage}%`"
-            :warn="agent.percentage >= 80"
+            :value="agent.percentage != null ? `${agent.percentage}%` : '--'"
+            :warn="agent.percentage != null && agent.percentage >= 80"
           />
           <DashboardMetricCard
             label="Resets In"
@@ -46,14 +46,16 @@ function formatCredits(n: number) {
           />
           <DashboardMetricCard
             label="Weekly Quota"
-            :value="`${agent.weeklyPercentage}%`"
-            :warn="agent.weeklyPercentage >= 80"
+            :value="agent.weeklyPercentage != null ? `${agent.weeklyPercentage}%` : '--'"
+            :warn="agent.weeklyPercentage != null && agent.weeklyPercentage >= 80"
+            :disabled="agent.weeklyPercentage == null"
             :subtext="agent.weeklyResetsIn ? `Resets ${agent.weeklyResetsIn}` : ''"
           />
           <DashboardMetricCard
             label="Monthly MCP"
-            :value="`${Math.round(agent.monthlyUsed / agent.monthlyTotal * 100)}%`"
-            :warn="agent.monthlyRemaining <= 10"
+            :value="agent.monthlyTotal > 0 ? `${Math.round(agent.monthlyUsed / agent.monthlyTotal * 100)}%` : '--'"
+            :warn="agent.monthlyTotal > 0 && agent.monthlyRemaining <= 10"
+            :disabled="agent.monthlyTotal === 0"
             :subtext="agent.monthlyResetsIn ? `Resets ${agent.monthlyResetsIn}` : ''"
           />
         </div>

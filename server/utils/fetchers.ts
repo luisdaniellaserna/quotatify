@@ -74,6 +74,8 @@ async function fetchCrofQuota(agent: AgentConfig, apiKey: string): Promise<Quota
     weeklyResetsIn: '',
     monthlyResetsIn: '',
     monthlyUsed: 0,
+    monthlyTotal: 0,
+    monthlyRemaining: 0,
     resetsIn: '1:00 PM',
     models: [],
     error: null,
@@ -87,17 +89,11 @@ async function fetchZaiQuota(agent: AgentConfig, apiKey: string): Promise<QuotaR
 
   const data = res?.data ?? res
   const limits = data?.limits ?? []
-  const timeLimit = limits.find((l: any) => l.type === 'TIME_LIMIT' && !l.unit)
   const monthlyTokenLimit = limits.find((l: any) => l.type === 'TOKENS_LIMIT' && l.unit === 3)
   const weeklyTokenLimit = limits.find((l: any) => l.type === 'TOKENS_LIMIT' && l.unit === 6)
   const mcpTimeLimit = limits.find((l: any) => l.type === 'TIME_LIMIT' && l.unit === 5)
 
-  const totalUsage = timeLimit?.usage ?? 0
-  const currentValue = timeLimit?.currentValue ?? 0
-  const timeLimitPercentage = totalUsage > 0 ? Math.round((currentValue / totalUsage) * 100) : null
-  const nextReset = monthlyTokenLimit?.nextResetTime ?? 0
-
-  const models: ModelUsage[] = (timeLimit?.usageDetails ?? []).map((m: any) => ({
+  const models: ModelUsage[] = (mcpTimeLimit?.usageDetails ?? []).map((m: any) => ({
     name: m.modelCode ?? m.model ?? '',
     requests: m.usage ?? m.requests ?? 0,
   }))
@@ -107,18 +103,18 @@ async function fetchZaiQuota(agent: AgentConfig, apiKey: string): Promise<QuotaR
     name: agent.name,
     enabled: agent.enabled,
     apiKeyConfigured: true,
-    totalRequests: currentValue,
+    totalRequests: mcpTimeLimit?.currentValue ?? 0,
     availableCredits: 0,
-    usableRequests: timeLimit?.remaining ?? 0,
-    usableLimit: totalUsage,
-    percentage: timeLimitPercentage ?? monthlyTokenLimit?.percentage ?? null,
+    usableRequests: mcpTimeLimit?.remaining ?? 0,
+    usableLimit: mcpTimeLimit?.usage ?? 0,
+    percentage: monthlyTokenLimit?.percentage ?? null,
     weeklyPercentage: weeklyTokenLimit?.percentage ?? null,
     weeklyResetsIn: weeklyTokenLimit?.nextResetTime ? formatFullDate(weeklyTokenLimit.nextResetTime) : '',
     monthlyResetsIn: mcpTimeLimit?.nextResetTime ? formatFullDate(mcpTimeLimit.nextResetTime) : '',
     monthlyUsed: mcpTimeLimit?.currentValue ?? 0,
     monthlyTotal: mcpTimeLimit?.usage ?? 0,
     monthlyRemaining: mcpTimeLimit?.remaining ?? 0,
-    resetsIn: nextReset ? formatResetTime(nextReset) : '',
+    resetsIn: monthlyTokenLimit?.nextResetTime ? formatResetTime(monthlyTokenLimit.nextResetTime) : '',
     models,
     error: null,
   }
