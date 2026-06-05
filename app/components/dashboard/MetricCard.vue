@@ -3,6 +3,7 @@ defineProps<{
   label: string
   value: string
   warn?: boolean
+  subtext?: string
 }>()
 </script>
 
@@ -18,6 +19,9 @@ defineProps<{
     </div>
     <div class="stat-value text-lg" :class="warn ? 'text-error' : 'text-base-content'">
       {{ value }}
+    </div>
+    <div v-if="subtext" class="stat-desc text-xs mt-1 opacity-60">
+      {{ subtext }}
     </div>
   </div>
 </template>
