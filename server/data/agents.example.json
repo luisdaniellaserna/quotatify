@@ -1,22 +1,7 @@
 {
   "agents": [
-    {
-      "id": "crof",
-      "name": "Crof.ai",
-      "apiKey": "",
-      "envKey": "NUXT_CROF_API_KEY",
-      "enabled": true,
-      "quotaUrl": "https://crof.ai/usage_api/",
-      "authType": "bearer"
-    },
-    {
-      "id": "zai",
-      "name": "Z.ai",
-      "apiKey": "",
-      "envKey": "NUXT_ZAI_API_KEY",
-      "enabled": true,
-      "quotaUrl": "https://api.z.ai/api/monitor/usage/quota/limit",
-      "authType": "bearer"
-    }
+    { "id": "crof", "enabled": true, "apiKey": "" },
+    { "id": "zai", "enabled": true, "apiKey": "" },
+    { "id": "deepseek", "enabled": true, "apiKey": "" }
   ]
 }

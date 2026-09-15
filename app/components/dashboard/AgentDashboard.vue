@@ -4,16 +4,6 @@ import type { AgentDashboard } from '~/stores/dashboard'
 defineProps<{
   agent: AgentDashboard
 }>()
-
-function formatNumber(n: number) {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`
-  return n.toLocaleString()
-}
-
-function formatCredits(n: number) {
-  return n.toFixed(3)
-}
 </script>
 
 <template>
@@ -33,52 +23,17 @@ function formatCredits(n: number) {
         <span>{{ agent.error }}</span>
       </div>
 
-      <template v-else-if="agent.apiKeyConfigured">
-        <div v-if="agent.percentage !== null" class="grid grid-cols-2 gap-3">
-          <DashboardMetricCard
-            label="Usage"
-            :value="agent.percentage != null ? `${agent.percentage}%` : '--'"
-            :warn="agent.percentage != null && agent.percentage >= 80"
-          />
-          <DashboardMetricCard
-            label="Resets In"
-            :value="agent.resetsIn || '--:--:--'"
-          />
-          <DashboardMetricCard
-            label="Weekly Quota"
-            :value="agent.weeklyPercentage != null ? `${agent.weeklyPercentage}%` : '--'"
-            :warn="agent.weeklyPercentage != null && agent.weeklyPercentage >= 80"
-            :disabled="agent.weeklyPercentage == null"
-            :subtext="agent.weeklyResetsIn ? `Resets ${agent.weeklyResetsIn}` : ''"
-          />
-          <DashboardMetricCard
-            label="Monthly MCP"
-            :value="agent.monthlyTotal > 0 ? `${Math.round(agent.monthlyUsed / agent.monthlyTotal * 100)}%` : '--'"
-            :warn="agent.monthlyTotal > 0 && agent.monthlyRemaining <= 10"
-            :disabled="agent.monthlyTotal === 0"
-            :subtext="agent.monthlyResetsIn ? `Resets ${agent.monthlyResetsIn}` : ''"
-          />
-        </div>
-        <div v-else class="grid grid-cols-2 gap-3">
-          <DashboardMetricCard
-            label="Total Requests"
-            :value="formatNumber(agent.totalRequests)"
-          />
-          <DashboardMetricCard
-            label="Available Credits"
-            :value="formatCredits(agent.availableCredits)"
-          />
-          <DashboardMetricCard
-            label="Usable Requests"
-            :value="`${agent.usableRequests}/${agent.usableLimit}`"
-            :warn="agent.usableRequests < 200"
-          />
-          <DashboardMetricCard
-            label="Resets In"
-            :value="agent.resetsIn || '--:--:--'"
-          />
-        </div>
-      </template>
+      <div v-else-if="agent.apiKeyConfigured && agent.metrics.length" class="grid grid-cols-2 gap-3">
+        <DashboardMetricCard
+          v-for="metric in agent.metrics"
+          :key="metric.label"
+          :label="metric.label"
+          :value="metric.value"
+          :warn="metric.warn"
+          :disabled="metric.disabled"
+          :subtext="metric.subtext"
+        />
+      </div>
 
       <div v-else class="py-6 text-center">
         <p class="text-xs text-base-content/50">

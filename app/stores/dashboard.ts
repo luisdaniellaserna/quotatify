@@ -1,28 +1,8 @@
-export interface ModelUsage {
-  name: string
-  requests: number
-}
+import type { ProviderMetric, ProviderSummary } from '#shared/types/provider'
 
-export interface AgentDashboard {
-  id: string
-  name: string
-  enabled: boolean
-  apiKeyConfigured: boolean
-  error: string | null
-  totalRequests: number
-  availableCredits: number
-  usableRequests: number
-  usableLimit: number
-  percentage: number | null
-  weeklyPercentage: number | null
-  weeklyResetsIn: string
-  monthlyResetsIn: string
-  monthlyUsed: number
-  monthlyTotal: number
-  monthlyRemaining: number
-  resetsIn: string
-  models: ModelUsage[]
-}
+export type { ProviderMetric, ProviderSummary }
+
+export type AgentDashboard = ProviderSummary
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const agents = ref<AgentDashboard[]>([])
